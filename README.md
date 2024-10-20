@@ -8,7 +8,7 @@
 - OS: Raspberry Pi OS Lite (64-bit)
 - Wi-Fi dongle
 
-### OS changes
+### OS
 
 - Configure IP address in `/etc/network/interfaces`
 example:
@@ -28,26 +28,56 @@ allow-hotplug wlan1
 iface wlan1 inet manual
 ```
 
-## Pi-hole deployment
+- Install docker `curl -sSL https://get.docker.com | sh`
 
-### deployment
+## Pi-hole
+
+### Pi-hole stack
+
+- Pi-hole
+- Pi-hole Prometheus Exporter
+- Prometheus Node Exporter
+
+### Pi-hole deployment
+
+For the Pi-hole app itself:
 
 1. Run the installation script provided [here](https://docs.pi-hole.net/main/basic-install/)
 
-## monitoring
-
-### monitoring stack
-
-- Pi-hole Prometheus Exporter
-- Prometheus to scrape pihole-exporter
-- Grafana to visualize Prometheus data
-
-### monitoring deployment
+In `/pi-hole-server`:
 
 1. Update `pihole-api-token.txt` with the Pi-hole API token.
 1. Replace `PIHOLE_HOSTNAME` value in `docker-compose.yaml`
 1. Run `docker compose up` to simplify visualizing logs. Ensure all containers
    are running and that there are no errors
 1. Run `docker compose up -d` to run the containers long term in detached mode.
+
+In `/node-exporter`:
+
+1. Run `docker compose up` to simplify visualizing logs. Ensure all containers
+   are running and that there are no errors
+1. Run `docker compose up -d` to run the containers long term in detached mode.
+
+## monitoring
+
+### monitoring stack
+
+- Prometheus
+- Grafana
+- Prometheus Node Exporter
+
+### monitoring deployment
+
+In `/monitoring-server`
+
+1. Run `docker compose up` to simplify visualizing logs. Ensure all containers
+   are running and that there are no errors
+1. Run `docker compose up -d` to run the containers long term in detached mode.
 1. In Grafana add our Prometheus deployment as a data source.
 1. In Grafana import dashboard JSON from [here](https://github.com/eko/pihole-exporter)
+
+In `/node-exporter`:
+
+1. Run `docker compose up` to simplify visualizing logs. Ensure all containers
+   are running and that there are no errors
+1. Run `docker compose up -d` to run the containers long term in detached mode.
