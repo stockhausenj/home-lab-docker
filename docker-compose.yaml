@@ -18,6 +18,8 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+    volumes:
+      - grafana_db:/var/lib/grafana
 
   pihole-exporter:
     image: ekofr/pihole-exporter:latest
@@ -34,7 +36,7 @@ services:
       - "9617:9617"
 
 volumes:
-  prometheus:
+  grafana_db:
 
 secrets:
   pihole_api_token:
