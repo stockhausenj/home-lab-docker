@@ -1,5 +1,11 @@
 # pi-hole-deployment
 
+## to-do
+
+- Save Grafana configs (dashboards, alert rules, etc) as code.
+- Move Pi-hole app to container image.
+- Save Pi-hole configs (custom domain records) as code.
+
 ## prepare infrastructure
 
 ### infra stack
@@ -29,6 +35,7 @@ iface wlan1 inet manual
 ```
 
 - Install docker `curl -sSL https://get.docker.com | sh`
+- Add user to `docker` group. Run `usermod -a -G docker admin`
 
 ## Pi-hole
 
