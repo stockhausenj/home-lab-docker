@@ -69,18 +69,17 @@ In `./node-exporter`:
 
 ### monitoring stack
 
-- Prometheus
-- Grafana
-- Prometheus Node Exporter
+- Prometheus node export
+- Prometheus pihole export
 
 ### monitoring deployment
 
-In `./monitoring-server`
+In `./pihole-exporter`
 
+1. Add pihole API key.
 1. Run `docker compose up` to simplify visualizing logs. Ensure all containers
    are running and that there are no errors
 1. Run `docker compose up -d` to run the containers long term in detached mode.
-1. In Grafana add our Prometheus deployment as a data source.
 1. In Grafana import dashboard JSON from [here](https://github.com/eko/pihole-exporter)
 
 In `./node-exporter`:
