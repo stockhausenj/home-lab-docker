@@ -1,0 +1,19 @@
+services:
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: unless-stopped
+    network_mode: host
+    ports:
+      - "80:8123"
+    volumes:
+      - config:/config
+    environment:
+      - TZ=America/Denver
+
+volumes:
+  config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.4.140,nfsvers=4"
+      device: ":/mnt/kube_pv/home-assistant
