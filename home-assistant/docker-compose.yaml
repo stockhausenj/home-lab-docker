@@ -3,17 +3,49 @@ services:
     image: ghcr.io/home-assistant/home-assistant:stable
     container_name: homeassistant
     restart: unless-stopped
-    network_mode: host
+    network_mode: host  # Uses the host's network stack
     ports:
-      - "80:8123"
+      - "80:8123"  # Home Assistant default port is 8123; mapped to port 80
     volumes:
       - config:/config
     environment:
+      - TZ=America/Denver  # Set your timezone if needed
+
+  zwave-js-ui:
+    container_name: zwave-js-ui
+    image: zwavejs/zwave-js-ui:latest
+    restart: always
+    tty: true
+    stop_signal: SIGINT
+    environment:
+      - SESSION_SECRET=mysupersecretkey
+      - ZWAVEJS_EXTERNAL_CONFIG=/usr/src/app/store/.config-db
+      # Uncomment if you want logs time and dates to match your timezone instead of UTC
+      # Available at https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
       - TZ=America/Denver
+    networks:
+      - zwave
+    devices:
+      # Do not use /dev/ttyUSBX serial devices, as those mappings can change over time.
+      # Instead, use the /dev/serial/by-id/X serial device for your Z-Wave stick.
+      - '/dev/ttyUSB0:/dev/zwave'
+    volumes:
+      - zwave-config:/usr/src/app/store
+    ports:
+      - '8091:8091' # port for web interface
+      - '3000:3000' # port for Z-Wave JS websocket server
 
 volumes:
   config:
     driver_opts:
       type: "nfs"
       o: "addr=10.0.4.140,nfsvers=4"
-      device: ":/mnt/kube_pv/home-assistant
+      device: ":/mnt/kube_pv/home-assistant"
+  zwave-config:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.4.140,nfsvers=4"
+      device: ":/mnt/kube_pv/zwave"
+
+networks:
+  zwave:
