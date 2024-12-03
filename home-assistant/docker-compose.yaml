@@ -37,12 +37,12 @@ volumes:
   config:
     driver_opts:
       type: "nfs"
-      o: "addr=10.0.4.140,nfsvers=4"
+      o: "addr=192.168.0.111,nfsvers=4"
       device: ":/mnt/kube_pv/home-assistant"
   zwave-config:
     driver_opts:
       type: "nfs"
-      o: "addr=10.0.4.140,nfsvers=4"
+      o: "addr=192.168.0.111,nfsvers=4"
       device: ":/mnt/kube_pv/zwave"
 
 networks:
