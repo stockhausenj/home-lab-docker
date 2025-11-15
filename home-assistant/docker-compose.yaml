@@ -3,13 +3,13 @@ services:
     image: ghcr.io/home-assistant/home-assistant:stable
     container_name: homeassistant
     restart: unless-stopped
-    network_mode: host  # Uses the host's network stack
+    network_mode: host # Uses the host's network stack
     ports:
-      - "80:8123"  # Home Assistant default port is 8123; mapped to port 80
+      - "80:8123" # Home Assistant default port is 8123; mapped to port 80
     volumes:
       - config:/config
     environment:
-      - TZ=America/Denver  # Set your timezone if needed
+      - TZ=America/Denver # Set your timezone if needed
 
   zwave-js-ui:
     container_name: zwave-js-ui
@@ -26,12 +26,27 @@ services:
     devices:
       # Do not use /dev/ttyUSBX serial devices, as those mappings can change over time.
       # Instead, use the /dev/serial/by-id/X serial device for your Z-Wave stick.
-      - '/dev/ttyUSB0:/dev/zwave'
+      - "/dev/ttyUSB0:/dev/zwave"
     volumes:
       - zwave-config:/usr/src/app/store
     ports:
-      - '8091:8091' # port for web interface
-      - '3000:3000' # port for Z-Wave JS websocket server
+      - "8091:8091" # port for web interface
+      - "3000:3000" # port for Z-Wave JS websocket server
+
+  faster-whisper:
+    image: lscr.io/linuxserver/faster-whisper:latest
+    container_name: faster-whisper
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WHISPER_MODEL=tiny-int8
+      - LOCAL_ONLY= #optional
+      - WHISPER_BEAM=1 #optional
+      - WHISPER_LANG=en #optional
+    ports:
+      - 10300:10300
+    restart: unless-stopped
 
 volumes:
   config:
